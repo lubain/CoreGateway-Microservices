@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+  # ─── API Gateway (port 3000) ────────────────────────────────────────────────
+  gateway:
+    build:
+      context: ./api-gateway
+    ports:
+      - '3000:3000'
+    environment:
+      PORT: 3000
+    depends_on:
+      - users-service
+      - orders-service
+    networks:
+      - graphql-net
+
+  # ─── Users Service (port 3001) ──────────────────────────────────────────────
+  users-service:
+    build:
+      context: ./users-service
+    ports:
+      - '3001:3001'
+    environment:
+      PORT: 3001
+    networks:
+      - graphql-net
+
+  # ─── Orders Service (port 3002) ─────────────────────────────────────────────
+  orders-service:
+    build:
+      context: ./orders-service
+    ports:
+      - '3002:3002'
+    environment:
+      PORT: 3002
+    networks:
+      - graphql-net
+
+networks:
+  graphql-net:
+    driver: bridge
